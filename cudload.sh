@@ -26,8 +26,8 @@ echo "
      -r - dropbox
      -y - yandex
      -g - google
-     -w - get dropbox uloader
-     -q - get google uploader
+#     -w - get dropbox uloader
+#     -q - get google uploader
      -m - archive for last file
      -o - archive for file or folder
      -l - list of files
