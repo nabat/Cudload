@@ -5,6 +5,7 @@ login=kikoandrew														#login yandex
 password=kiko335														#password yandex
 DROPBOX_UPLOADER_PATH=/usr/local/cudload/
 PASSWORD_PATH=/usr/local/cudload/
+BACKUP_PATH=/usr/local/Cudload/
 DOWNLOAD_PATH=/var/download/
 ARCHIVE_BACKUP_PATH=/var/cudload/
 GOOGLE_UPLOADER_PATH=/usr/local/cudload/
