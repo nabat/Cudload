@@ -27,8 +27,8 @@ echo "
      -r - dropbox
      -y - yandex
      -g - google
-#     -w - get dropbox uloader
-#     -q - get google uploader
+     -w - get dropbox uloader
+     -q - get google uploader
      -m - archive for last file
      -o - archive for file or folder
      -l - list of files
@@ -136,8 +136,10 @@ yandex_upload () {
 #Скачиваем с яндекса диска
 #*****************************************************
 yandex_download () {
-
-	${CURL} --user ${login}:${password}  "https://webdav.yandex.ru/${DATE}.tar.gz.code" -o ${DOWNLOAD_PATH}${DATE}.tar.gz.code
+	echo 'Enter file name for upload:';
+	read FILE
+	
+	${CURL} --user ${login}:${password}  "https://webdav.yandex.ru/${FILE}.tar.gz.code" -o ${DOWNLOAD_PATH}${FILE}.tar.gz.code
 	echo "File download"
 
 }
