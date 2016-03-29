@@ -167,7 +167,7 @@ google_upload () {
 #******************************************
 google_download () {
 
-	${GOOGLE_UPLOADER_PATH}google_uploader list -t backup
+	${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILE
 
 	read FILE
 
