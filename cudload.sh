@@ -86,9 +86,10 @@ make_archive () {
 #Расшифровывает архив и удаляет зашифрованый
 #********************************************
 destroy_archive () {
-
-	openssl enc -d -aes-256-cbc -in ${DOWNLOAD_PATH}${DATE}.tar.gz.code -out ${DOWNLOAD_PATH}${DATE}.tar.gz -pass file:${PASSWORD_PATH}pass.txt
-	rm ${DOWNLOAD_PATH}${DATE}.tar.gz.code
+	echo "Enter file name for encoding:";
+	read FILENAME;
+	openssl enc -d -aes-256-cbc -in ${DOWNLOAD_PATH}${FILENAME}.tar.gz.code -out ${DOWNLOAD_PATH}${FILENAME}.tar.gz -pass file:${PASSWORD_PATH}pass.txt
+	rm ${DOWNLOAD_PATH}${FILENAME}.tar.gz.code
 	echo "Done"
 
 }
@@ -177,8 +178,8 @@ google_download () {
 	FILE=${ID}
 
 	${GOOGLE_UPLOADER_PATH}google_uploader download  -i $FILE
-	cp ${SCRIPT_PATH}backup.tar.gz.code ${DOWNLOAD_PATH}
-	rm ${SCRIPT_PATH}backup.tar.gz.code
+	cp ${SCRIPT_PATH}$FILENAME.tar.gz.code ${DOWNLOAD_PATH}
+	rm ${SCRIPT_PATH}$FILENAME.tar.gz.code
 
 }
 
