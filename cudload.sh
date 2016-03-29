@@ -166,8 +166,9 @@ google_upload () {
 #Скачиваем с Google Drive
 #******************************************
 google_download () {
-	FILE=$OPTARG;
-	${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILE
+	echo 'Enter file name';
+	read FILENAME;
+	${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILENAME;
 
 	read FILE
 
