@@ -169,10 +169,11 @@ google_download () {
 	echo 'Enter file name';
 	read FILENAME;
 	${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILENAME;
+	
+	echo 'Enter file ID';
+	read ID;
 
-	read FILE
-
-	ID=`${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILE | grep ${FILE} | awk '{ print $1 }'`
+	#ID=`${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILE | grep ${FILE} | awk '{ print $1 }'`
 	FILE=${ID}
 
 	${GOOGLE_UPLOADER_PATH}google_uploader download  -i $FILE
