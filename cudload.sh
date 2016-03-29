@@ -116,8 +116,9 @@ dropbox_upload () {
 #Скачивание бекапов с Dropbox
 #*******************************************
 dropbox_download () {
-
-	${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh download ${DATE}.tar.gz.code ${DOWNLOAD_PATH}
+	echo 'Enter file name for download from Dropbox:';
+	read FILE
+	${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh download ${FILE}.tar.gz.code ${DOWNLOAD_PATH}
 	echo "File download"
 
 }
