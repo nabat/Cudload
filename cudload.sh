@@ -171,7 +171,7 @@ google_download () {
 
 	read FILE
 
-	ID=`${GOOGLE_UPLOADER_PATH}google_uploader list -t backup | grep ${FILE} | awk '{ print $1 }'`
+	ID=`${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILE | grep ${FILE} | awk '{ print $1 }'`
 	FILE=${ID}
 
 	${GOOGLE_UPLOADER_PATH}google_uploader download  -i $FILE
