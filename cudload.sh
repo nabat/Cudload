@@ -66,7 +66,7 @@ make_archive () {
 		mkdir /var/cudload/
 	fi;
 
-  if [ ${TYPE_ARCHIVE}  = m ]; then
+  if [ "${TYPE_ARCHIVE}"  = "m" ]; then
     cd $BACKUP_PATH
     echo "$BACKUP_PATH"
     FILE=`ls -t | head -1`
@@ -74,7 +74,7 @@ make_archive () {
   	openssl enc -e -aes-256-cbc -in ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz -out ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code -pass file:${PASSWORD_PATH}pass.txt
   	echo "Code done"
   	fi;
-  if [ ${TYPE_ARCHIVE} = o ]; then
+  if [ "${TYPE_ARCHIVE}" = "o" ]; then
   	tar -cvf ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz $BACKUP_PATH
 		openssl enc -e -aes-256-cbc -in ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz -out ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code -pass file:${PASSWORD_PATH}pass.txt
 		echo "Code done"
