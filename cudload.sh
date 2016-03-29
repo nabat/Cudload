@@ -62,8 +62,8 @@ google_uploader () {
 #********************************************
 make_archive () {
 
-  if ! [ -d /var/cudload/ ]; then
-		mkdir /var/cudload/
+  if ! [ -d /var/Сudload/ ]; then
+		mkdir /var/Сudload/
 	fi;
 
   if [ "${TYPE_ARCHIVE}"  = "m" ]; then
@@ -136,11 +136,11 @@ yandex_upload () {
 #Скачиваем с яндекса диска
 #*****************************************************
 yandex_download () {
-	echo 'Enter file name for upload:';
+	echo 'Enter file name for download from Yandex Disk:';
 	read FILE
 	
 	${CURL} --user ${login}:${password}  "https://webdav.yandex.ru/${FILE}.tar.gz.code" -o ${DOWNLOAD_PATH}${FILE}.tar.gz.code
-	echo "File download"
+	echo "Download from Yandex Disk completed"
 
 }
 
@@ -149,7 +149,7 @@ yandex_download () {
 #*****************************************
 google_upload () {
 
-	if [ ! -f /usr/local/cudload/google_uploader ]; then
+	if [ ! -f ${GOOGLE_UPLOADER_PATH}google_uploader ]; then
 		if [ ! -f /usr/bin/wget ]; then
 			apt-get --reinstall install wget
 		fi;																												# проверка на наличие google_uploadera
@@ -169,11 +169,11 @@ google_upload () {
 #Скачиваем с Google Drive
 #******************************************
 google_download () {
-	echo 'Enter file name';
+	echo 'Enter file name for download from Google Drive';
 	read FILENAME;
 	${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILENAME;
 	
-	echo 'Enter file ID';
+	echo 'Enter file ID for download';
 	read ID;
 
 	#ID=`${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILE | grep ${FILE} | awk '{ print $1 }'`
@@ -182,7 +182,7 @@ google_download () {
 	${GOOGLE_UPLOADER_PATH}google_uploader download  -i $FILE
 	cp ${SCRIPT_PATH}$FILENAME.tar.gz.code ${DOWNLOAD_PATH}
 	rm ${SCRIPT_PATH}$FILENAME.tar.gz.code
-
+	echo 'Download from Google Drive completed';
 }
 
 #*******************************************
