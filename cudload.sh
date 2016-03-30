@@ -243,7 +243,7 @@ yandex_upload () {
 #*****************************************************
 yandex_download () {
   if [ ! ${FILE_DOWNLOAD_NAME} ];then
-	  echo 'Enter file name to download from Yandex Disk:';
+	  echo 'Enter name of to download from Yandex Disk:';
 	  read FILENAME
 	else
 	  FILENAME=${FILE_DOWNLOAD_NAME};
@@ -329,11 +329,9 @@ google_download () {
 #*******************************************
 file_list () {
 
-  if [ ! "${SYSTEM}" ];then
-
+  if [ ! ${SYSTEM} ];then
   	echo -n "Select system for $ACTION file: r - dropbox, y - yandex, g - google : "
     read SYSTEM;
-
   fi;
 
 	if [ "${SYSTEM}" = r ]; then
@@ -341,7 +339,7 @@ file_list () {
 	elif [ "${SYSTEM}" = g ]; then
 	  ${GOOGLE_UPLOADER_PATH}google_uploader list
 	else
-	  echo " !!! System does not supports list";
+	  echo " !!! Not implemented ";
   fi;
 
 }
@@ -373,7 +371,7 @@ interactive () {
 	fi;
 }
 
-while getopts "udirywgqm:o:l:f:z:" opt ; do
+while getopts "udirywgqm:o:lf:z:" opt ; do
   case "$opt" in
 
   w)
@@ -397,7 +395,6 @@ while getopts "udirywgqm:o:l:f:z:" opt ; do
   g)
      SYSTEM=g;																							# Google
   ;;
-
   i)
      interactive=i;																					# Интерактивный режим
   ;;
@@ -418,7 +415,6 @@ while getopts "udirywgqm:o:l:f:z:" opt ; do
   z)
      FILE_DOWNLOAD_ID=$OPTARG;
   ;;
-
 esac
 done
 
