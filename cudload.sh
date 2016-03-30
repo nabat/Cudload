@@ -1,8 +1,8 @@
 #!/bin/bash
 VERSION=1.0
 
-login=kikoandrew	#login yandex
-password=kiko335	#password yandex
+login=test	  #login yandex
+password=test	#password yandex
 
 DROPBOX_UPLOADER_PATH="/usr/local/Cudload/"
 DROPBOX_API_SCRIPT="https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh"
