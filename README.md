@@ -1,50 +1,69 @@
 # Cudload
 Console utills for download and upload backup to remote servers
 
-VERSION=1.0
+###VERSION
+1.0
+----------
+###Variables
+* *login*                   - login for Yandex Disk
 
-login=                                      - логин к яндекс диску
+* *password*                - password for Yandex Disk
 
-password=                                   - пароль к яндекс диску
+* *DROPBOX_UPLOADER_PATH*   - path to dropbox uploader
 
-DROPBOX_UPLOADER_PATH=/usr/local/cudload/   - путь к скрипту дробокса
+* *PASSWORD_PATH*           - path to password file
 
-PASSWORD_PATH=/usr/local/cudload/           - путь к файлу с паролем для шифрования архива
+* *DOWNLOAD_PATH*           - path to download directory
 
-DOWNLOAD_PATH=/var/download/                - путь к папке куда скачивает бекапы с удаленных серверов
+* *ARCHIVE_BACKUP_PATH*     - path to archived backup
 
-ARCHIVE_BACKUP_PATH=/var/cudload/           - путь к архиву бекапа
+* *GOOGLE_UPLOADER_PATH*    - path to google uploader
 
-GOOGLE_UPLOADER_PATH=/usr/local/cudload/    - путь к скрипту гугл диска
+* *SCRIPT_PATH*             - path to cudload.sh
 
-SCRIPT_PATH=/usr/local/cudload/             - путь к нашему скрипту
+* DATE=`date +%Y-%m-%d`
 
-DATE=`date +%Y-%m-%d`
+* CURL=`which curl`
 
-CURL=`which curl`
+* WGET=`which wget`
 
-WGET=`which wget`
 
-Работа с скриптом:
+<br>
+----------
 
-     -u - upload mode
+###Cudload.sh - simple backup operations<br>
+<b>Usage:</b>
+
+  ```
+  ./cudload.sh [-i] [-ud] [-ryg] [-l] [-o FILE|DIR] [ -f FILENAME [-z FILEID] ]
+  -i - interactive mode
+  -u - upload mode
+  -d - download mode
+  -r - Dropbox
+  -y - Yandex.Disk
+  -g - Google Drive
+  -w - get Dropbox uloader
+  -q - get google uploader
+  -m - archive for last file
+  -o - archive for file or folder
+  -l - list of files
+  -f - name of file to download
+  -z - ID for file in Google Drive\n
+  -h - Show this help
+  ```
+<br>
+----------
+
+<b>Examples:</b><br>
      
-     -d - download mode
+* Show list of files on Google Drive<br>
+  ```sh./cudload.sh -l -g```
+       
+* Encrypt and upload /home/administrator to Google Drive<br>
+  <code>./cudload.sh -u -g -o /home/administrator/</code>
      
-     -i - interactive mode
-     
-     -r - dropbox
-     
-     -y - yandex
-     
-     -g - google
-     
-     -w - get dropbox uloader
-     
-     -q - get google uploader
-     
-     -m - archive for last file
-     
-     -o - archive for file or folder
-     
-     -l - list of files
+* Download and decrypt file from Google Drive by ID 0BzA2l61Ik_23VzZtT0NXdDJYcW8<br>
+  <code>./cudload.sh -d -g -f 2016-03-30 -z 0BzA2l61Ik_23VzZtT0NXdDJYcW8</code>
+       
+* Download from Yandex.Disk<br>
+  <code>./cudload.sh -d -y -f 2016-03-30</code>
