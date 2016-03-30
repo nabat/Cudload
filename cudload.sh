@@ -114,7 +114,7 @@ exit 1;
 dropbox_uploader () {
 
 	${WGET} -P ${DROPBOX_UPLOADER_PATH} ${DROPBOX_API_SCRIPT}
-	chmod 700 ${DROPBOX_UPLOADER_PATH} dropbox_uploader.sh
+	chmod 700 ${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh
 	echo "Downloaded Dropbox uploader";
 
 }
@@ -162,7 +162,7 @@ make_archive () {
 }
 
 #********************************************
-# Decrypt and remove crypted archive
+# Decrypt and remove encrypted archive
 #********************************************
 destroy_archive () {
 
@@ -195,21 +195,30 @@ dropbox_upload () {
 
 	${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh upload ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code .
 
-	echo "File upload"
+	echo "File uploaded";
+
 	rm ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code
 	echo "Coded archive deleted"
-
 }
 
 #*******************************************
 # Download from Dropbox
 #*******************************************
 dropbox_download () {
-	echo 'Enter file name for download from Dropbox:';
-	read FILE
-	${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh download ${FILE}.tar.gz.code ${DOWNLOAD_PATH}
-	echo "File download"
 
+	if [ ! -f "${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh" ]; then
+ 	 dropbox_uploader
+	fi;
+
+  if [ ! ${FILE_DOWNLOAD_NAME} ];then
+	  echo 'Enter file name to download from Yandex Disk:';
+	  read FILENAME
+	else
+	  FILENAME=${FILE_DOWNLOAD_NAME};
+	fi;
+
+	${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh download ${FILENAME}.tar.gz.code ${DOWNLOAD_PATH}
+	echo "File downloaded";
 }
 
 #****************************************************
