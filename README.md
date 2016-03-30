@@ -21,12 +21,6 @@ Console utills for download and upload backup to remote servers
 
 * *SCRIPT_PATH*             - path to cudload.sh
 
-* DATE=`date +%Y-%m-%d`
-
-* CURL=`which curl`
-
-* WGET=`which wget`
-
 
 <br>
 ----------
@@ -49,7 +43,6 @@ Console utills for download and upload backup to remote servers
   -l - list of files
   -f - name of file to download
   -z - ID for file in Google Drive\n
-  -h - Show this help
   ```
 <br>
 ----------
@@ -57,7 +50,7 @@ Console utills for download and upload backup to remote servers
 <b>Examples:</b><br>
      
 * Show list of files on Google Drive<br>
-  ```sh./cudload.sh -l -g```
+  ```./cudload.sh -l -g```
        
 * Encrypt and upload /home/administrator to Google Drive<br>
   <code>./cudload.sh -u -g -o /home/administrator/</code>
