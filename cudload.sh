@@ -217,6 +217,8 @@ dropbox_download () {
 	  FILENAME=${FILE_DOWNLOAD_NAME};
 	fi;
 
+	FILENAME=`echo ${FILENAME} | sed 's/.tar.gz.*//'`;
+
 	${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh download ${FILENAME}.tar.gz.code ${DOWNLOAD_PATH}
 	echo "File downloaded";
 }
