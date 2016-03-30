@@ -1,29 +1,39 @@
 #!/bin/bash
 VERSION=1.0
 
-login=kikoandrew														#login yandex
-password=kiko335														#password yandex
-DROPBOX_UPLOADER_PATH=/usr/local/Cudload/
-PASSWORD_PATH=/usr/local/Cudload/
-BACKUP_PATH=/usr/local/Cudload/
-DOWNLOAD_PATH=/var/download/
-ARCHIVE_BACKUP_PATH=/var/Cudload/
-GOOGLE_UPLOADER_PATH=/usr/local/Cudload/
-SCRIPT_PATH=/usr/local/Cudload/
+login=test	  #login yandex
+password=test	#password yandex
+
+DROPBOX_UPLOADER_PATH="/usr/local/Cudload/"
+DROPBOX_API_SCRIPT="https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh"
+
+PASSWORD_PATH="/usr/local/Cudload/"
+BACKUP_PATH="/usr/local/Cudload/"
+
+DOWNLOAD_PATH="/var/download/"
+ARCHIVE_BACKUP_PATH="/var/Cudload/"
+
+GOOGLE_UPLOADER_PATH="/usr/local/Cudload/"
+GOOGLE_API_SCRIPT="https://drive.google.com/uc?id=0B3X9GlR6EmbnSnVqdUFWSjJhbUU"
+SCRIPT_PATH="/usr/local/Cudload/"
+
 DATE=`date +%Y-%m-%d`
 CURL=`which curl`
 WGET=`which wget`
 
 #********************************************
-#HELP
+#  Usage
 #*******************************************
 print_help () {
 
 echo "
+  Cudload.sh - simple backup operations
 
+   Usage: ./cudload.sh [-i] [-ud] [-ryg] [-l] [-o FILE|DIR]
+
+     -i - interactive mode
      -u - upload mode
      -d - download mode
-     -i - interactive mode
      -r - dropbox
      -y - yandex
      -g - google
@@ -32,80 +42,90 @@ echo "
      -m - archive for last file
      -o - archive for file or folder
      -l - list of files
+     -h - Show this help
 "
+
+exit 1;
 
 }
 
 #********************************************
-#Скачиваем Dropbox uploader
+# Downloading dropbox API script
 #********************************************
 dropbox_uploader () {
 
-	${WGET} -P ${DROPBOX_UPLOADER_PATH}  https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh
-	chmod 777 ${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh
-	echo "Uploader download"
+	${WGET} -P ${DROPBOX_UPLOADER_PATH} ${DROPBOX_API_SCRIPT}
+	chmod +x ${DROPBOX_UPLOADER_PATH} dropbox_uploader.sh
+	echo "Downloaded Dropbox uploader";
 
 }
 
 #*********************************************
-#Скачиваем Google uploader
+# Downloading Google API script
 #*********************************************
 google_uploader () {
 
-	${WGET}  https://drive.google.com/uc?id=0B3X9GlR6EmbnSnVqdUFWSjJhbUU -O ${GOOGLE_UPLOADER_PATH}google_uploader
-	chmod 777 ${GOOGLE_UPLOADER_PATH}google_uploader
+	${WGET} ${GOOGLE_API_SCRIPT} -O ${GOOGLE_UPLOADER_PATH}google_uploader
+	chmod +x ${GOOGLE_UPLOADER_PATH}google_uploader
 
 }
 
 #********************************************
-#Делает архив
+# Make archive
 #********************************************
 make_archive () {
 
-  if ! [ -d /var/Сudload/ ]; then
-		mkdir /var/Сudload/
+  if ! [ -d "${ARCHIVE_BACKUP_PATH}" ]; then
+		mkdir ${ARCHIVE_BACKUP_PATH}
 	fi;
 
   if [ "${TYPE_ARCHIVE}"  = "m" ]; then
     cd $BACKUP_PATH
     echo "$BACKUP_PATH"
+
     FILE=`ls -t | head -1`
   	tar -cvf ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz $FILE
   	openssl enc -e -aes-256-cbc -in ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz -out ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code -pass file:${PASSWORD_PATH}pass.txt
-  	echo "Code done"
-  	fi;
+  	echo "Encrypting operations:  done"
+  fi;
+
   if [ "${TYPE_ARCHIVE}" = "o" ]; then
   	tar -cvf ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz $BACKUP_PATH
 		openssl enc -e -aes-256-cbc -in ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz -out ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code -pass file:${PASSWORD_PATH}pass.txt
-		echo "Code done"
+		echo "Encrypting operations:  done"
   fi;
 
 }
 
 #********************************************
-#Расшифровывает архив и удаляет зашифрованый
+# Decrypt and remove crypted archive
 #********************************************
 destroy_archive () {
-	echo "Enter file name for encoding:";
-	read FILENAME;
+	echo -n "Path to file for decrypting:" ;
+  read FILENAME
 	openssl enc -d -aes-256-cbc -in ${DOWNLOAD_PATH}${FILENAME}.tar.gz.code -out ${DOWNLOAD_PATH}${FILENAME}.tar.gz -pass file:${PASSWORD_PATH}pass.txt
-	rm ${DOWNLOAD_PATH}${FILENAME}.tar.gz.code
-	echo "Done"
 
+	rm ${DOWNLOAD_PATH}${FILENAME}.tar.gz.code
+
+	echo "Done";
 }
 
 #********************************************
-#Загрузка бекапов на Dropbox
+# Upload backup to Dropbox
 #********************************************
 dropbox_upload () {
-	
-	if [ ! -f /usr/local/cudload/dropbox_uploader.sh ]; then		
-		if [ ! -f /usr/bin/wget ]; then
-			apt-get --reinstall install wget
-		fi;										# Проверка на наличие dropbox_uploadera										
+
+	if [ ! -e ${WGET} ]; then
+	  echo "Wrong path to Wget : '${WGET}'. Exit";
+	  exit 1;
+	fi;
+
+	if [ ! -f "${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh" ]; then
  	 dropbox_uploader
 	fi;
+
 	${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh upload ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code .
+
 	echo "File upload"
 	rm ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code
 	echo "Coded archive deleted"
@@ -113,7 +133,7 @@ dropbox_upload () {
 }
 
 #*******************************************
-#Скачивание бекапов с Dropbox
+# Download from Dropbox
 #*******************************************
 dropbox_download () {
 	echo 'Enter file name for download from Dropbox:';
@@ -124,36 +144,39 @@ dropbox_download () {
 }
 
 #****************************************************
-#Загружаем на яндекс диск
+# Upload to Yandex.Disk
 #****************************************************
 yandex_upload () {
 
 	${CURL} --user ${login}:${password} -T ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code "https://webdav.yandex.ru"
 	echo "File upload"
-	
+
 }
 
 #*****************************************************
-#Скачиваем с яндекса диска
+# Download from Yandex.Disk
 #*****************************************************
 yandex_download () {
-	echo 'Enter file name for download from Yandex Disk:';
+	echo 'Enter file name to download from Yandex Disk:';
 	read FILE
-	
+
 	${CURL} --user ${login}:${password}  "https://webdav.yandex.ru/${FILE}.tar.gz.code" -o ${DOWNLOAD_PATH}${FILE}.tar.gz.code
 	echo "Download from Yandex Disk completed"
 
 }
 
 #*****************************************
-#Закачиваем на Google Drive
+# Upload to Google Drive
 #*****************************************
 google_upload () {
 
+	if [ ! -e ${WGET} ]; then
+	  echo "Wrong path to Wget : '${WGET}'. Exit";
+	  exit 1;
+	fi;
+
+
 	if [ ! -f ${GOOGLE_UPLOADER_PATH}google_uploader ]; then
-		if [ ! -f /usr/bin/wget ]; then
-			apt-get --reinstall install wget
-		fi;																												# проверка на наличие google_uploadera
 		google_uploader
 	fi;
 
@@ -170,12 +193,14 @@ google_upload () {
 #Скачиваем с Google Drive
 #******************************************
 google_download () {
-	echo 'Enter file name for download from Google Drive';
+	echo 'Enter file name to download from Google Drive';
 	read FILENAME;
 	${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILENAME;
-	
-	echo 'Enter file ID for download';
-	read ID;
+
+	# TODO : Grep ID
+
+	echo 'Enter file ID to download';
+  read ID;
 
 	#ID=`${GOOGLE_UPLOADER_PATH}google_uploader list -t $FILE | grep ${FILE} | awk '{ print $1 }'`
 	FILE=${ID}
@@ -183,44 +208,53 @@ google_download () {
 	${GOOGLE_UPLOADER_PATH}google_uploader download  -i $FILE
 	cp ${SCRIPT_PATH}$FILENAME.tar.gz.code ${DOWNLOAD_PATH}
 	rm ${SCRIPT_PATH}$FILENAME.tar.gz.code
-	echo 'Download from Google Drive completed';
+
+	echo 'Download from Google Drive has been completed';
 }
 
 #*******************************************
-#Список файлов
+# List of files
 #*******************************************
 file_list () {
 
-	echo -n "Select system for $ACTION file: r - dropbox, y - yandex, g - google : "
-	read SYSTEM
+	echo -np "Select system for $ACTION file: r - dropbox, y - yandex, g - google : " SYSTEM
+
 	if [ "${SYSTEM}" = r ]; then
 		${DROPBOX_UPLOADER_PATH}dropbox_uploader.sh list
 	fi;
+
 	if [ "${SYSTEM}" = g ]; then
-	${GOOGLE_UPLOADER_PATH}google_uploader list
+	  ${GOOGLE_UPLOADER_PATH}google_uploader list
 	fi;
 
 }
+
 #*******************************************
-#Интерактивный мод
+# Interactive mode
 #*******************************************
 interactive () {
 
-	echo -n "Select action: u - upload / d - download / w - get dropbox uploader / q - get google uploader / l - file list : "
-	read ACTION
-	if [ ${ACTION} = l ]; then
+	echo -n  "Select action: u - upload / d - download / w - get dropbox uploader / q - get google uploader / l - file list : "
+  read ACTION
+
+  if [ x"${ACTION}" = x"w" -o x"${ACTION}" = x"q" ];then
+    return
+  fi;
+
+	if [ x"${ACTION}" = x"l" ]; then
 		echo -n "Select system for $ACTION file: r - dropbox, y - yandex, g - google : "
 		read SYSTEM
 	else
-		echo -n "Select what to archive - o - make archive of path / m - last file : "
+		echo -n "What you want to backup?  o - make archive of path / m - last file : "
 		read TYPE_ARCHIVE
+
+		echo "Path to file ";
 		read BACKUP_PATH
+
 		echo -n "Select system for $ACTION file: r - dropbox, y - yandex, g - google : "
 		read SYSTEM
 	fi;
 }
-
-
 
 while getopts "udirywgqm:o:l" opt ; do
   case "$opt" in
@@ -228,40 +262,32 @@ while getopts "udirywgqm:o:l" opt ; do
   w)
      ACTION=w;																							# Скачать dropbox uploader
   ;;
-
   q)
      ACTION=q;																							# Скачать google uploader
   ;;
-
   u)
      ACTION=u;																							# Upload
   ;;
-
   d)
      ACTION=d;																							# Download
   ;;
-
   r)
      SYSTEM=r;																							# Dropbox
   ;;
-
   y)
      SYSTEM=y;																							# Yandex
   ;;
-
   g)
      SYSTEM=g;																							# Google
   ;;
 
-  i) 
+  i)
      interactive=i;																					# Интерактивный режим
   ;;
-
   m)
      BACKUP_PATH=$OPTARG;
      TYPE_ARCHIVE=m;																				# Архив последнего файла
   ;;
-  
   o)
      BACKUP_PATH=$OPTARG;
      TYPE_ARCHIVE=o;																				# Архив файла по имени
@@ -271,9 +297,6 @@ while getopts "udirywgqm:o:l" opt ; do
   ;;
 esac
 done
-
-
-
 
 if [ "${interactive}" = i ]; then
   interactive;
@@ -298,6 +321,7 @@ if [ "${ACTION}" = u ]; then
   fi;
 
 elif [ "${ACTION}" = d ]; then
+
   if [ "${SYSTEM}" = r ]; then
     dropbox_download
     destroy_archive
@@ -310,6 +334,7 @@ elif [ "${ACTION}" = d ]; then
     google_download
     destroy_archive
   fi
+
 elif [ "${ACTION}" = w ]; then
     dropbox_uploader
 elif [ "${ACTION}" = q ]; then
@@ -318,10 +343,6 @@ else
   print_help
 fi
 fi;
-
-
-
-
 
 exit 0
 
