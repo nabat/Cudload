@@ -148,13 +148,13 @@ make_archive () {
     echo "$BACKUP_PATH"
 
     FILE=`ls -t | head -1`
-  	tar -cvf ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz $FILE
+  	tar -cvf ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz ${FILE}
   	openssl enc -e -aes-256-cbc -in ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz -out ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code -pass file:${PASSWORD_PATH}pass.txt
   	echo "Encrypting operations:  done"
   fi;
 
   if [ "${TYPE_ARCHIVE}" = "o" ]; then
-  	tar -cvf ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz $BACKUP_PATH
+  	tar -cvf ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz ${BACKUP_PATH}
 		openssl enc -e -aes-256-cbc -in ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz -out ${ARCHIVE_BACKUP_PATH}${DATE}.tar.gz.code -pass file:${PASSWORD_PATH}pass.txt
 		echo "Encrypting operations:  done"
   fi;
