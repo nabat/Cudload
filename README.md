@@ -1,10 +1,9 @@
 # Cudload
 Console utils for download and upload backup to remote servers
 
-###VERSION
-1.1
+### VERSION 1.1
 ----------
-###Variables
+### Variables
 
 Can be found on the first lines of script
 
@@ -23,12 +22,8 @@ Can be found on the first lines of script
 * *GOOGLE_UPLOADER_PATH*    - path to google uploader
 
 * *SCRIPT_PATH*             - path to cudload.sh
-
-
-<br>
 ----------
-
-###Cudload.sh - simple backup operations<br>
+### Cudload.sh - simple backup operations<br>
 <b>Usage:</b>
 
   ```
@@ -50,9 +45,7 @@ Can be found on the first lines of script
      -z - ID for file in Google Drive
      -h - Show this help
   ```
-<br>
 ----------
-
 <b>Examples:</b><br>
 
 * Show list of files on Google Drive<br>
@@ -69,6 +62,5 @@ Can be found on the first lines of script
 
 * Download from Yandex.Disk<br>
   <code>./cudload.sh -d -y -f 2016-03-30</code>
-
 ----------
 Be sure to copy your password file to secure place, to be able to restore backup, if backuped server will die
